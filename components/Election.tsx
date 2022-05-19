@@ -1,6 +1,6 @@
 import type { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 import { useEffect, useState } from "react";
 import useElectionContract from "../hooks/useElectionContract";
 import { formatEtherscanLink, shortenHex } from "../util";
@@ -24,9 +24,10 @@ type InfoType = {
 }
 
 const Election = ({ contractAddress }: PropsType) => {
-  const { connector, account, library, chainId } = useWeb3React<Web3Provider>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { chainId } = useWeb3React<Web3Provider>();
   const electionContract = useElectionContract(contractAddress);
+
+  const [loading, setLoading] = useState<boolean>(false);
   const [currentLeader, setCurrentLeader] = useState<string>(Leader[0]);
   const [currentSeats, setCurrentSeats] = useState<number[]>([0,0]);
   const [electionEnded, setElectionEnded] = useState<boolean | undefined>();
@@ -37,10 +38,12 @@ const Election = ({ contractAddress }: PropsType) => {
   const [stateSeats, setStateSeats] = useState<number | undefined>();
 
   useEffect(() => {
-    getCurrentLeader();
-    getCurrentSeats();
-    getElectionEnded();
-  },[])
+    if(electionContract) {
+      getCurrentLeader();
+      getCurrentSeats();
+      getElectionEnded();
+    }
+  },[electionContract])
 
   const getCurrentLeader = async () => {
     const currentLeader = await electionContract.currentLeader();
