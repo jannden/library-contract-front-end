@@ -3,9 +3,8 @@ import Head from "next/head";
 import Link from "next/link";
 import Account from "../components/Account";
 import NativeCurrencyBalance from "../components/NativeCurrencyBalance";
-import TokenBalance from "../components/TokenBalance";
-import USLibrary from "../components/USLibrary";
-import { ALBT_TOKEN_ADDRESS, US_ELECTION_ADDRESS } from "../constants";
+import Election from "../components/Election";
+import { ELECTION_ADDRESS } from "../constants";
 import useEagerConnect from "../hooks/useEagerConnect";
 
 function Home() {
@@ -43,9 +42,7 @@ function Home() {
         {isConnected && (
           <section>
             <NativeCurrencyBalance />
-
-            <TokenBalance tokenAddress={ALBT_TOKEN_ADDRESS} symbol="ALBT" />
-            <USLibrary contractAddress={US_ELECTION_ADDRESS} />
+            <Election contractAddress={ELECTION_ADDRESS} />
           </section>
         )}
       </main>
@@ -55,7 +52,6 @@ function Home() {
           display: flex;
           justify-content: space-between;
         }
-
         main {
           text-align: center;
         }
